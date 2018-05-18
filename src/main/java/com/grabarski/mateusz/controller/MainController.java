@@ -1,5 +1,6 @@
 package com.grabarski.mateusz.controller;
 
+import com.grabarski.mateusz.interfaces.Sorter;
 import com.grabarski.mateusz.sort.*;
 import com.grabarski.mateusz.utils.SortUtils;
 import javafx.fxml.FXML;
@@ -33,11 +34,11 @@ public class MainController {
 
         lineChart.setTitle("Sorting differences");
 
-        lineChart.getData().add(getBubbleSeries());
-        lineChart.getData().add(getInserting());
-        lineChart.getData().add(getSelection());
-        lineChart.getData().add(getHeap());
-        lineChart.getData().add(getMergeSeries());
+        lineChart.getData().add(getSeries(new BubbleSorter(), bubbleSortingTime));
+        lineChart.getData().add(getSeries(new InsertionSorter(), insertSortingTime));
+        lineChart.getData().add(getSeries(new SelectionSorter(), selectionSortingTime));
+        lineChart.getData().add(getSeries(new HeapSorter(), heapSortingTime));
+        lineChart.getData().add(getSeries(new MergeSorter(), mergeSortingTime));
     }
 
     private void initValues() {
@@ -66,56 +67,12 @@ public class MainController {
         System.out.println("mergeSortingTime = " + mergeSortingTime.size());
     }
 
-    private XYChart.Series<Number, Number> getBubbleSeries() {
+    private XYChart.Series<Number, Number> getSeries(Sorter sorter, List<Long> times) {
         XYChart.Series series = new XYChart.Series();
-        series.setName(new BubbleSorter().getAlgorithmName());
+        series.setName(sorter.getAlgorithmName());
 
         for (int i = 0; i < numberOfElements.size(); i++) {
-            series.getData().add(new XYChart.Data(numberOfElements.get(i), bubbleSortingTime.get(i)));
-        }
-
-        return series;
-    }
-
-    private XYChart.Series<Number, Number> getInserting() {
-        XYChart.Series series = new XYChart.Series();
-        series.setName(new InsertionSorter().getAlgorithmName());
-
-        for (int i = 0; i < numberOfElements.size(); i++) {
-            series.getData().add(new XYChart.Data(numberOfElements.get(i), insertSortingTime.get(i)));
-        }
-
-        return series;
-    }
-
-    private XYChart.Series<Number, Number> getSelection() {
-        XYChart.Series series = new XYChart.Series();
-        series.setName(new SelectionSorter().getAlgorithmName());
-
-        for (int i = 0; i < numberOfElements.size(); i++) {
-            series.getData().add(new XYChart.Data(numberOfElements.get(i), selectionSortingTime.get(i)));
-        }
-
-        return series;
-    }
-
-    private XYChart.Series<Number, Number> getHeap() {
-        XYChart.Series series = new XYChart.Series();
-        series.setName(new HeapSorter().getAlgorithmName());
-
-        for (int i = 0; i < numberOfElements.size(); i++) {
-            series.getData().add(new XYChart.Data(numberOfElements.get(i), heapSortingTime.get(i)));
-        }
-
-        return series;
-    }
-
-    private XYChart.Series<Number, Number> getMergeSeries() {
-        XYChart.Series series = new XYChart.Series();
-        series.setName(new MergeSorter().getAlgorithmName());
-
-        for (int i = 0; i < numberOfElements.size(); i++) {
-            series.getData().add(new XYChart.Data(numberOfElements.get(i), mergeSortingTime.get(i)));
+            series.getData().add(new XYChart.Data(numberOfElements.get(i), times.get(i)));
         }
 
         return series;
