@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox fx:controller="com.grabarski.mateusz.controller.MainController"
-      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+      prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.grabarski.mateusz.controller.MainController">
     <children>
         <LineChart fx:id="lineChart">
             <xAxis>
@@ -18,5 +19,15 @@
                 <NumberAxis side="LEFT"/>
             </yAxis>
         </LineChart>
+        <VBox prefHeight="400.0" prefWidth="201.0">
+            <children>
+                <CheckBox fx:id="bubbleSortCB" mnemonicParsing="false" selected="true" text="Bubble sort"/>
+                <CheckBox fx:id="insertSortCB" mnemonicParsing="false" selected="true" text="Insert sort"/>
+                <CheckBox fx:id="selectionSortCB" mnemonicParsing="false" selected="true" text="Selection sort"/>
+                <CheckBox fx:id="heapSortCB" mnemonicParsing="false" selected="true" text="Heap sort"/>
+                <CheckBox fx:id="mergeSortCB" mnemonicParsing="false" selected="true" text="Merge sort"/>
+                <Button fx:id="refreshChart" mnemonicParsing="false" text="Refresh Chart"/>
+            </children>
+        </VBox>
     </children>
-</VBox>
+</HBox>

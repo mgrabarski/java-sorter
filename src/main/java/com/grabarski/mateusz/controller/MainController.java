@@ -3,9 +3,13 @@ package com.grabarski.mateusz.controller;
 import com.grabarski.mateusz.interfaces.Sorter;
 import com.grabarski.mateusz.sort.*;
 import com.grabarski.mateusz.utils.SortUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,27 @@ public class MainController {
     public static final int END_NUMBER = 10_000;
     public static final int STEP = 500;
 
+    @FXML
+    private LineChart<Number, Number> lineChart;
+
+    @FXML
+    private CheckBox bubbleSortCB;
+
+    @FXML
+    private CheckBox insertSortCB;
+
+    @FXML
+    private CheckBox selectionSortCB;
+
+    @FXML
+    private CheckBox heapSortCB;
+
+    @FXML
+    private CheckBox mergeSortCB;
+
+    @FXML
+    private Button refreshChart;
+
     private List<Integer> numberOfElements;
     private List<Long> bubbleSortingTime;
     private List<Long> insertSortingTime;
@@ -26,19 +51,29 @@ public class MainController {
     private List<Long> heapSortingTime;
     private List<Long> mergeSortingTime;
 
-    @FXML
-    private LineChart<Number, Number> lineChart;
-
     public void initialize() {
         initValues();
 
         lineChart.setTitle("Sorting differences");
 
-        lineChart.getData().add(getSeries(new BubbleSorter(), bubbleSortingTime));
-        lineChart.getData().add(getSeries(new InsertionSorter(), insertSortingTime));
-        lineChart.getData().add(getSeries(new SelectionSorter(), selectionSortingTime));
-        lineChart.getData().add(getSeries(new HeapSorter(), heapSortingTime));
-        lineChart.getData().add(getSeries(new MergeSorter(), mergeSortingTime));
+        refreshChart.setOnAction(event -> refreshData());
+    }
+
+    private void refreshData() {
+
+        lineChart.getData().remove(0, lineChart.getData().size());
+
+        addSelectedSeries(bubbleSortCB, new BubbleSorter(), bubbleSortingTime);
+        addSelectedSeries(insertSortCB, new InsertionSorter(), insertSortingTime);
+        addSelectedSeries(selectionSortCB, new SelectionSorter(), selectionSortingTime);
+        addSelectedSeries(heapSortCB, new HeapSorter(), heapSortingTime);
+        addSelectedSeries(mergeSortCB, new MergeSorter(), mergeSortingTime);
+    }
+
+    private void addSelectedSeries(CheckBox checkBox, Sorter sorter, List<Long> times) {
+        if (checkBox.isSelected()) {
+            lineChart.getData().add(getSeries(sorter, times));
+        }
     }
 
     private void initValues() {
