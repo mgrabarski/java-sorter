@@ -58,13 +58,6 @@ public class MainController {
             heapSortingTime.add(SortUtils.getTimeOfSorting(i, END_NUMBER, new HeapSorter()));
             mergeSortingTime.add(SortUtils.getTimeOfSorting(i, END_NUMBER, new MergeSorter()));
         }
-
-        System.out.println("numberOfElements = " + numberOfElements.size());
-        System.out.println("bubbleSortingTime = " + bubbleSortingTime.size());
-        System.out.println("insertSortingTime = " + insertSortingTime.size());
-        System.out.println("selectionSortingTime = " + selectionSortingTime.size());
-        System.out.println("heapSortingTime = " + heapSortingTime.size());
-        System.out.println("mergeSortingTime = " + mergeSortingTime.size());
     }
 
     private XYChart.Series<Number, Number> getSeries(Sorter sorter, List<Long> times) {
