@@ -3,13 +3,14 @@ package com.grabarski.mateusz.controller;
 import com.grabarski.mateusz.interfaces.Sorter;
 import com.grabarski.mateusz.sort.*;
 import com.grabarski.mateusz.utils.SortUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Slider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,6 @@ import java.util.List;
 public class MainController {
 
     public static final int START_NUMBER = 0;
-    public static final int END_NUMBER = 10_000;
-    public static final int STEP = 500;
 
     @FXML
     private LineChart<Number, Number> lineChart;
@@ -44,6 +43,18 @@ public class MainController {
     @FXML
     private Button refreshChart;
 
+    @FXML
+    private Slider numberOfItemsS;
+
+    @FXML
+    private Slider maxRandomNumberS;
+
+    @FXML
+    private Slider stepS;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
+
     private List<Integer> numberOfElements;
     private List<Long> bubbleSortingTime;
     private List<Long> insertSortingTime;
@@ -52,15 +63,13 @@ public class MainController {
     private List<Long> mergeSortingTime;
 
     public void initialize() {
-        initValues();
-
         lineChart.setTitle("Sorting differences");
+        Platform.runLater(() -> progressIndicator.setVisible(false));
 
-        refreshChart.setOnAction(event -> refreshData());
+        refreshChart.setOnAction(event -> initValues());
     }
 
     private void refreshData() {
-
         lineChart.getData().remove(0, lineChart.getData().size());
 
         addSelectedSeries(bubbleSortCB, new BubbleSorter(), bubbleSortingTime);
@@ -68,6 +77,8 @@ public class MainController {
         addSelectedSeries(selectionSortCB, new SelectionSorter(), selectionSortingTime);
         addSelectedSeries(heapSortCB, new HeapSorter(), heapSortingTime);
         addSelectedSeries(mergeSortCB, new MergeSorter(), mergeSortingTime);
+
+        Platform.runLater(() -> progressIndicator.setVisible(false));
     }
 
     private void addSelectedSeries(CheckBox checkBox, Sorter sorter, List<Long> times) {
@@ -77,22 +88,28 @@ public class MainController {
     }
 
     private void initValues() {
-        numberOfElements = new ArrayList<>();
-        bubbleSortingTime = new ArrayList<>();
-        insertSortingTime = new ArrayList<>();
-        selectionSortingTime = new ArrayList<>();
-        heapSortingTime = new ArrayList<>();
-        mergeSortingTime = new ArrayList<>();
+        Platform.runLater(() -> progressIndicator.setVisible(true));
 
-        for (int i = START_NUMBER; i <= END_NUMBER; i += STEP) {
-            System.out.println("Number of item: " + i);
-            numberOfElements.add(i);
-            bubbleSortingTime.add(SortUtils.getTimeOfSorting(i, END_NUMBER, new BubbleSorter()));
-            insertSortingTime.add(SortUtils.getTimeOfSorting(i, END_NUMBER, new InsertionSorter()));
-            selectionSortingTime.add(SortUtils.getTimeOfSorting(i, END_NUMBER, new SelectionSorter()));
-            heapSortingTime.add(SortUtils.getTimeOfSorting(i, END_NUMBER, new HeapSorter()));
-            mergeSortingTime.add(SortUtils.getTimeOfSorting(i, END_NUMBER, new MergeSorter()));
-        }
+        new Thread(() -> {
+            numberOfElements = new ArrayList<>();
+            bubbleSortingTime = new ArrayList<>();
+            insertSortingTime = new ArrayList<>();
+            selectionSortingTime = new ArrayList<>();
+            heapSortingTime = new ArrayList<>();
+            mergeSortingTime = new ArrayList<>();
+
+            for (int i = START_NUMBER; i <= numberOfItemsS.getValue(); i += stepS.getValue()) {
+                System.out.println("Number of item: " + i);
+                numberOfElements.add(i);
+                bubbleSortingTime.add(SortUtils.getTimeOfSorting(i, (int) maxRandomNumberS.getValue(), new BubbleSorter()));
+                insertSortingTime.add(SortUtils.getTimeOfSorting(i, (int) maxRandomNumberS.getValue(), new InsertionSorter()));
+                selectionSortingTime.add(SortUtils.getTimeOfSorting(i, (int) maxRandomNumberS.getValue(), new SelectionSorter()));
+                heapSortingTime.add(SortUtils.getTimeOfSorting(i, (int) maxRandomNumberS.getValue(), new HeapSorter()));
+                mergeSortingTime.add(SortUtils.getTimeOfSorting(i, (int) maxRandomNumberS.getValue(), new MergeSorter()));
+            }
+
+            Platform.runLater(() -> refreshData());
+        }).start();
     }
 
     private XYChart.Series<Number, Number> getSeries(Sorter sorter, List<Long> times) {

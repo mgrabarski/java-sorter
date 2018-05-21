@@ -6,61 +6,50 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+      prefWidth="700.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.grabarski.mateusz.controller.MainController">
     <children>
-        <LineChart fx:id="lineChart">
-            <xAxis>
-                <NumberAxis side="BOTTOM"/>
-            </xAxis>
-            <yAxis>
-                <NumberAxis side="LEFT"/>
-            </yAxis>
-        </LineChart>
-        <VBox prefHeight="400.0" prefWidth="201.0">
+        <HBox>
             <children>
-                <CheckBox fx:id="bubbleSortCB" mnemonicParsing="false" selected="true" text="Bubble sort"/>
-                <CheckBox fx:id="insertSortCB" mnemonicParsing="false" selected="true" text="Insert sort"/>
-                <CheckBox fx:id="selectionSortCB" mnemonicParsing="false" selected="true" text="Selection sort"/>
-                <CheckBox fx:id="heapSortCB" mnemonicParsing="false" selected="true" text="Heap sort"/>
-                <CheckBox fx:id="mergeSortCB" mnemonicParsing="false" selected="true" text="Merge sort"/>
-                <HBox prefWidth="200.0">
+                <LineChart fx:id="lineChart">
+                    <xAxis>
+                        <NumberAxis side="BOTTOM"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis side="LEFT"/>
+                    </yAxis>
+                </LineChart>
+                <VBox prefHeight="400.0" prefWidth="201.0">
                     <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="40.0" text="0">
-                            <HBox.margin>
-                                <Insets right="20.0"/>
-                            </HBox.margin>
-                        </Label>
-                        <Slider/>
+                        <CheckBox fx:id="bubbleSortCB" mnemonicParsing="false" selected="true" text="Bubble sort"/>
+                        <CheckBox fx:id="insertSortCB" mnemonicParsing="false" selected="true" text="Insert sort"/>
+                        <CheckBox fx:id="selectionSortCB" mnemonicParsing="false" selected="true"
+                                  text="Selection sort"/>
+                        <CheckBox fx:id="heapSortCB" mnemonicParsing="false" selected="true" text="Heap sort"/>
+                        <CheckBox fx:id="mergeSortCB" mnemonicParsing="false" selected="true" text="Merge sort"/>
+                        <Button fx:id="refreshChart" mnemonicParsing="false" text="Refresh Chart"/>
+                        <ProgressIndicator fx:id="progressIndicator"/>
                     </children>
-                </HBox>
-                <HBox prefWidth="200.0">
-                    <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="40.0" text="0">
-                            <HBox.margin>
-                                <Insets right="20.0"/>
-                            </HBox.margin>
-                        </Label>
-                        <Slider/>
-                    </children>
-                </HBox>
-                <HBox prefWidth="200.0">
-                    <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="40.0" text="0">
-                            <HBox.margin>
-                                <Insets right="20.0"/>
-                            </HBox.margin>
-                        </Label>
-                        <Slider/>
-                    </children>
-                </HBox>
-                <Button fx:id="refreshChart" mnemonicParsing="false" text="Refresh Chart"/>
+                </VBox>
             </children>
-        </VBox>
+        </HBox>
+        <Label text="Number of items"/>
+        <Slider fx:id="numberOfItemsS" majorTickUnit="1000.0" max="10000.0" showTickLabels="true" showTickMarks="true"
+                value="10000.0"/>
+        <Label text="Max random number"/>
+        <Slider fx:id="maxRandomNumberS" majorTickUnit="100.0" max="1000.0" showTickLabels="true" showTickMarks="true"
+                value="1000.0"/>
+        <Label text="Step"/>
+        <Slider fx:id="stepS" majorTickUnit="50.0" max="500.0" showTickLabels="true" showTickMarks="true"
+                value="500.0"/>
     </children>
-</HBox>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</VBox>
